@@ -9,4 +9,14 @@ class Category extends Model
 {
     use SoftDeletes;
     protected $fillable = ['name', 'photo'];
+
+    public function subcategories()
+    {
+        return $this->hasMany('App\Subcategory');
+    }
+
+    public function items()
+    {
+        return $this->hasManyThrough('App\Item','App\Subcategory');
+    }
 }

@@ -1,3 +1,22 @@
 php artisan make:model Category -m
 php artisan make:controller CategoryController -m Category --api
 
+php artisan storage:link
+
+
+Order Process (store) -> postman
+  - note (text)
+    - Urgent Order
+
+  - data (text - json string)
+    - '[{"id":3,"name":"earum","photo":"itemimg/lIG91LAJGLdZTJqVQoSyUKtC7MIDxuYBXCyQrdff.png","price":7269,"qty":1},{"id":4,"name":"qui","photo":"itemimg/U2TBiCRU801zbmoCzAUoVX35Xlp5L7wn4dkzu4qY.png","price":6025,"qty":1},{"id":2,"name":"enim","photo":"itemimg/hmaKibu2Le79LD0e8bEsjV5JKteYyhfkwpilFsIp.png","price":4879,"qty":1}]'
+
+  - total (text)
+    - 20000
+
+API Auth (Sanctum)
+------------------
+  - composer require laravel/sanctum
+  - php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+  - php artisan migrate
+  - Add HasApiToken Class into User Model

@@ -25,4 +25,11 @@ Route::get('users',function(){
     return UserResource::collection($users);
 });
 
-Route::apiresource('brand','BrandController');
+Route::middleware('auth:sanctum')->apiresource('brand','BrandController');
+Route::apiresource('category','CategoryController');
+Route::apiresource('subcategory','SubcategoryController');
+
+
+// Auth
+Route::post('register','UserController@register');
+
