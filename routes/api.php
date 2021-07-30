@@ -16,7 +16,7 @@ use App\Http\Resources\UserResource;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -25,11 +25,20 @@ Route::get('users',function(){
     return UserResource::collection($users);
 });
 
-Route::middleware('auth:sanctum')->apiresource('brand','BrandController');
-Route::apiresource('category','CategoryController');
-Route::apiresource('subcategory','SubcategoryController');
+// Frontend
+Route::get('items','FrontendController@getItems')->name('items.all');
 
+// Backend
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiresource('brand','BrandController');
+    Route::apiresource('category','CategoryController');
+    Route::apiresource('subcategory','SubcategoryController');
+    Route::apiresource('item','ItemController');
+
+    Route::get('testing','UserController@testing'); // abilities
+    Route::post('logout','UserController@logout'); // revoke
+});
 
 // Auth
 Route::post('register','UserController@register');
-
+Route::post('login','UserController@login');

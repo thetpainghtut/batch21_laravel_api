@@ -20,8 +20,57 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
 
-        $token = $user->createToken('token-name');
+        $data = [
+            'message' => 'Successfully Register!',
+            'user' => new UserResource($user)
+        ];
+        return response($data,201);
+    }
 
-        return new UserResource($user);
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+            // 'device_name' => 'required',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
+        }
+
+        $token = $user->createToken('Mobile',['server:update']);
+
+        $data = [
+            'message' => 'Successfully Login!',
+            'token' => $token->plainTextToken
+        ];
+        return response($data,200);
+    }
+
+    public function testing(Request $request)
+    {
+        if (!$request->user()->tokenCan('server:testing')) {
+            $data = [
+                'message' => 'Unauthorized!',
+            ];
+
+            return response($data,403);
+        }
+        return 'a';
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        $data = [
+            'message' => 'Successfully Logout!',
+        ];
+        return response($data,200);
     }
 }
